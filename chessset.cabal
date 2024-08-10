@@ -27,6 +27,8 @@ library
   exposed-modules:
       Base
       Lib
+      Pawn
+      Piece
       Splice
   other-modules:
       Paths_chessset

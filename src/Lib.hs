@@ -5,6 +5,7 @@ module Lib
 import qualified Waterfall
 import qualified Base
 import qualified Pawn
+import qualified Piece
 import Linear (V2(..), zero)
 
 skirting :: Waterfall.Path2D
@@ -15,4 +16,13 @@ skirting = Waterfall.pathFrom zero
     ]
 
 someFunc :: IO ()
-someFunc = Waterfall.writeSTL 0.005 "base.stl" $ Pawn.pawn 1.0 0.25 0.4 0.5 3.0 skirting
+someFunc = 
+    let pawn = Piece.piece $ Piece.PieceData 
+            { Piece.pieceBaseR = 1.0
+            , Piece.pieceNeckR = 0.25
+            , Piece.pieceCollarR = 0.4
+            , Piece.pieceHeight = 3
+            , Piece.pieceTopper = Pawn.topper 0.5 0.1
+            , Piece.pieceSkirting = skirting
+            }
+    in Waterfall.writeSTL 0.005 "pawn.stl" $ pawn
