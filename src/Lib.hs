@@ -4,8 +4,8 @@ module Lib
 
 import qualified Waterfall
 import qualified Base
+import qualified Pawn
 import Linear (V2(..), zero)
-
 
 skirting :: Waterfall.Path2D
 skirting = Waterfall.pathFrom zero
@@ -15,4 +15,4 @@ skirting = Waterfall.pathFrom zero
     ]
 
 someFunc :: IO ()
-someFunc = Waterfall.writeSTL 0.005 "base.stl" . Waterfall.revolution $ Base.profile 1.0 0.2 0.4 2.4 skirting
+someFunc = Waterfall.writeSTL 0.005 "base.stl" $ Pawn.pawn 1.0 0.25 0.4 0.5 3.0 skirting
