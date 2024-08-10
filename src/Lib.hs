@@ -4,6 +4,7 @@ module Lib
 
 import qualified Waterfall
 import qualified Pawn
+import qualified Bishop
 import qualified Queen
 import qualified King
 import qualified Piece
@@ -27,6 +28,14 @@ someFunc =
             , Piece.pieceSkirting = skirting
             }
             
+        bishop = Piece.piece $ Piece.PieceData 
+            { Piece.pieceBaseR = 1.4
+            , Piece.pieceNeckR = 0.4
+            , Piece.pieceCollarR = 0.8
+            , Piece.pieceHeight = 5
+            , Piece.pieceTopper = Bishop.topper 0.8
+            , Piece.pieceSkirting = skirting
+            }
         queen = Piece.piece $ Piece.PieceData 
             { Piece.pieceBaseR = 1.6
             , Piece.pieceNeckR = 0.4
@@ -45,5 +54,6 @@ someFunc =
             }
     in do
             Waterfall.writeSTL 0.005 "pawn.stl" $ pawn
+            Waterfall.writeSTL 0.005 "bishop.stl" $ bishop
             Waterfall.writeSTL 0.005 "queen.stl" $ queen
             Waterfall.writeSTL 0.005 "king.stl" $ king

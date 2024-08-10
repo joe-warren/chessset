@@ -3,8 +3,7 @@ module Queen
 ) where
 
 import qualified Waterfall
-import Linear (zero)
-import Linear.V2 (V2(..))
+import Linear (zero, V2 (..))
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
