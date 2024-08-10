@@ -5,6 +5,7 @@ module Lib
 import qualified Waterfall
 import qualified Pawn
 import qualified Queen
+import qualified King
 import qualified Piece
 import Linear (V2(..), zero)
 
@@ -34,6 +35,15 @@ someFunc =
             , Piece.pieceTopper = Queen.topper 0.8
             , Piece.pieceSkirting = skirting
             }
+        king = Piece.piece $ Piece.PieceData 
+            { Piece.pieceBaseR = 1.6
+            , Piece.pieceNeckR = 0.4
+            , Piece.pieceCollarR = 0.8
+            , Piece.pieceHeight = 6.5
+            , Piece.pieceTopper = King.topper 0.8
+            , Piece.pieceSkirting = skirting
+            }
     in do
             Waterfall.writeSTL 0.005 "pawn.stl" $ pawn
             Waterfall.writeSTL 0.005 "queen.stl" $ queen
+            Waterfall.writeSTL 0.005 "king.stl" $ king
