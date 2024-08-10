@@ -29,6 +29,7 @@ library
       Lib
       Pawn
       Piece
+      Queen
       Splice
   other-modules:
       Paths_chessset
