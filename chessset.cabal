@@ -28,6 +28,7 @@ library
       Base
       Bishop
       King
+      Knight
       Lib
       Pawn
       Piece

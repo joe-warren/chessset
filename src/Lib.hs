@@ -5,6 +5,7 @@ module Lib
 import qualified Waterfall
 import qualified Pawn
 import qualified Rook
+import qualified Knight
 import qualified Bishop
 import qualified Queen
 import qualified King
@@ -66,3 +67,4 @@ someFunc =
             Waterfall.writeSTL 0.005 "bishop.stl" $ bishop
             Waterfall.writeSTL 0.005 "queen.stl" $ queen
             Waterfall.writeSTL 0.005 "king.stl" $ king
+            Waterfall.writeSTL 0.005 "knight.stl" $ Knight.topper
