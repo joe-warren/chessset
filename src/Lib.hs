@@ -37,6 +37,14 @@ someFunc =
             , Piece.pieceTopper = Rook.topper 0.8
             , Piece.pieceSkirting = skirting
             }
+        knight = Piece.piece $ Piece.PieceData 
+            { Piece.pieceBaseR = 1.4
+            , Piece.pieceNeckR = 0.4
+            , Piece.pieceCollarR = 0.8
+            , Piece.pieceHeight = 5
+            , Piece.pieceTopper = Knight.topper 1
+            , Piece.pieceSkirting = skirting
+            }
         bishop = Piece.piece $ Piece.PieceData 
             { Piece.pieceBaseR = 1.4
             , Piece.pieceNeckR = 0.4
@@ -64,7 +72,7 @@ someFunc =
     in do
             Waterfall.writeSTL 0.005 "pawn.stl" $ pawn
             Waterfall.writeSTL 0.005 "rook.stl" $ rook
+            Waterfall.writeSTL 0.005 "knight.stl" $ knight
             Waterfall.writeSTL 0.005 "bishop.stl" $ bishop
             Waterfall.writeSTL 0.005 "queen.stl" $ queen
             Waterfall.writeSTL 0.005 "king.stl" $ king
-            Waterfall.writeSTL 0.005 "knight.stl" $ Knight.topper
