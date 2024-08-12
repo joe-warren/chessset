@@ -99,7 +99,7 @@ topper r =
             let rx = Waterfall.rotate (V3 1 0 0) (-pi/2) x
                 (br, tl) = fromMaybe (error "bad aabb") $ Waterfall.axisAlignedBoundingBox rx 
                 target = zero & _xy .~ ((br ^. _xy + tl ^. _xy) / 2) & _z .~ (br ^. _z)
-                s = 2 * r / ((tl - br) ^. _x)
+                s = 2.4 * r / ((tl - br) ^. _x)
              in Waterfall.translate (V3 (-0.2 * r) 0 (-0.01)) 
                     . Waterfall.uScale s 
                     . Waterfall.translate (negate target) 
