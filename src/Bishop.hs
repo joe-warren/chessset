@@ -1,9 +1,11 @@
+{-# LANGUAGE RecordWildCards #-}
 module Bishop 
 ( topper
 ) where
 
 import qualified Waterfall
 import Linear (zero, V2 (..), V3 (..), (^*), unit, _x)
+import Topper (Args(..))
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -24,5 +26,5 @@ cut r = Waterfall.translate (V3 0 0 r) $
                 Waterfall.scale (V3 4 0.1 4 ^* r) $
                     Waterfall.translate (V3 0 0 0.5) Waterfall.centeredCube
 
-topper :: Double -> Waterfall.Solid
-topper radius = (Waterfall.revolution $ xSection radius) `Waterfall.difference` cut radius
+topper :: Double -> Topper.Args -> Waterfall.Solid
+topper radius Topper.Args {..} = (topperSolidification $ xSection radius) `Waterfall.difference` cut radius

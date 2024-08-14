@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 module Knight 
 ( topper
 ) where
@@ -6,6 +7,7 @@ import Linear (V2 (..), V3 (..), zero, _x, _z, _xy)
 import Data.Maybe (fromMaybe)
 import Data.Function ((&))
 import Control.Lens ((.~), (^.))
+import qualified Topper
 
 -- "m 9.3619051,18.867762 
 --  h 6.2763869 
@@ -89,8 +91,8 @@ xSectionEye = Waterfall.pathFrom (V2 10.111197 8.4484604)
 
 
 
-topper :: Double -> Waterfall.Solid
-topper r = 
+topper :: Double -> Topper.Args -> Waterfall.Solid
+topper r _ = 
     let p x t = Waterfall.translate (V3 0 0 x) . Waterfall.prism t . Waterfall.fromPath
         eyeCutA = p (-1) 1.5 xSectionEye 
         eyeCutB = p 4.75 1.5 xSectionEye 

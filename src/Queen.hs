@@ -1,9 +1,11 @@
+{-# LANGUAGE RecordWildCards #-}
 module Queen 
 ( topper
 ) where
 
 import qualified Waterfall
 import Linear (zero, V2 (..))
+import qualified Topper
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -17,5 +19,5 @@ xSection radius =
             , Waterfall.arcViaRelative (V2 (bobbleR * 0.4) (bobbleR * 0.8)) (V2 (-bobbleR * 0.6) (bobbleR * 1.8))
             ]
 
-topper :: Double -> Waterfall.Solid
-topper radius = Waterfall.revolution $ xSection radius
+topper :: Double -> Topper.Args -> Waterfall.Solid
+topper radius Topper.Args {..} = topperSolidification $ xSection radius

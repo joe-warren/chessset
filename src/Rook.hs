@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 module Rook
 ( topper
 ) where
@@ -5,6 +6,7 @@ module Rook
 
 import qualified Waterfall
 import Linear (zero, V2 (..), V3 (..), unit, _z)
+import Topper (Args(..))
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -29,5 +31,5 @@ cut r n =
         in Waterfall.translate (V3 0 0 (r * 2)). mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ beam
         
 
-topper :: Double -> Waterfall.Solid
-topper radius = (Waterfall.revolution $ xSection radius) `Waterfall.difference` cut radius 7
+topper :: Double -> Topper.Args -> Waterfall.Solid
+topper radius Topper.Args {..} = (topperSolidification $ xSection radius) `Waterfall.difference` cut radius 7

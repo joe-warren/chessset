@@ -10,6 +10,7 @@ import qualified Bishop
 import qualified Queen
 import qualified King
 import qualified Piece
+import Polygonize (polygonize)
 import Linear (V2(..), zero, V3 (..))
 import Data.Foldable (forM_)
 
@@ -31,7 +32,7 @@ someFunc =
             , ("king", King.topper)
             ]
         pieces = 
-            [ let interpolate low hi = low + (hi - low) * (fromInteger i / 5)
+            [ let interpolate low hi = low + (hi - low) * (fromIntegral i / 5)
               in (name, 
                 Waterfall.translate (V3 (interpolate 0 16) 0 0) $ Piece.piece $ Piece.PieceData 
                     { Piece.pieceBaseR = interpolate 1.0 1.6 
@@ -40,6 +41,7 @@ someFunc =
                     , Piece.pieceHeight = interpolate 3 6.5
                     , Piece.pieceTopper = topper (interpolate 0.5 0.8) 
                     , Piece.pieceSkirting = skirting
+                    , Piece.pieceSolidification = polygonize (i + 4)
                     }
                 )
                 | (i, (name, topper)) <- zip [0..] rawPieces

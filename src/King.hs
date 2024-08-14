@@ -1,3 +1,4 @@
+{-# LANGUAGE RecordWildCards #-}
 module King
 ( topper
 ) where
@@ -5,6 +6,7 @@ module King
 
 import qualified Waterfall
 import Linear (zero, V2(..), V3 (..))
+import qualified Topper
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -23,5 +25,5 @@ cross l1 l2 t =
      in Waterfall.translate (V3 0 0 (l1/2)) (b1 <> b2)
 
 
-topper :: Double -> Waterfall.Solid
-topper radius = (Waterfall.revolution $ xSection radius) <> (Waterfall.translate (V3 0 0 (radius * 1.45)) $ cross radius (radius * 0.75) (radius * 0.3))
+topper :: Double -> Topper.Args -> Waterfall.Solid
+topper radius Topper.Args {..} = (topperSolidification $ xSection radius) <> (Waterfall.translate (V3 0 0 (radius * 1.45)) $ cross radius (radius * 0.75) (radius * 0.3))
