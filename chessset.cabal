@@ -32,9 +32,11 @@ library
       Lib
       Pawn
       Piece
+      Polygonize
       Queen
       Rook
       Splice
+      Topper
   other-modules:
       Paths_chessset
   autogen-modules:
