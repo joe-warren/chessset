@@ -19,7 +19,6 @@ xSection radius =
             , Waterfall.bezierTo (V2 radius ((h1 + hMid) / 2 )) (V2 (radius * 0.5) h1) (V2 (bobbleR * 0.6) h1) 
             , Waterfall.arcViaRelative (V2 (bobbleR * 0.4) (bobbleR * 0.8)) (V2 (-bobbleR * 0.6) (bobbleR * 1.8))
             ]
-
             
 xSectionOuter :: Double -> Waterfall.Path2D
 xSectionOuter radius = 
@@ -31,7 +30,7 @@ xSectionOuter radius =
             , Waterfall.bezierTo (V2 (radius * 0.9) (hMid * 0.25)) (V2 radius (hMid * 0.75)) (V2 radius hMid )
             , Waterfall.lineRelative (V2 0 (h1 - hMid))
             , Waterfall.lineRelative (V2 (-0.1 * radius) 0)
-            , Waterfall.bezierTo  (V2 (0.9 * radius) (h1 * 0.75)) (V2 (radius * 0.8) (h1 * 0.25)) (V2 (radius * 0.7) (h1 * 0.1))
+            , Waterfall.bezierTo  (V2 (0.8 * radius) (h1 * 0.75)) (V2 (radius * 0.7) (h1 * 0.25)) (V2 (radius * 0.6) (h1 * 0.1))
             , Waterfall.lineTo (V2 0 (h1 * 0.1))
             ]
 

@@ -28,7 +28,7 @@ someFunc =
             , ("rook", Rook.topper)  
             , ("knight", Knight.topper)
             , ("bishop", Bishop.topper)
-            , ("queen", Queen.topper 8)
+            , ("queen", Queen.topper 4)
             , ("king", King.topper)
             ]
         pieces = 
@@ -41,7 +41,7 @@ someFunc =
                     , Piece.pieceHeight = interpolate 3 6.5
                     , Piece.pieceTopper = topper (interpolate 0.5 0.8) 
                     , Piece.pieceSkirting = skirting
-                    , Piece.pieceSolidification = polygonize (i + 4)
+                    , Piece.pieceSolidification = polygonize 4 -- Waterfall.revolution -- polygonize (i + 4)
                     }
                 )
                 | (i, (name, topper)) <- zip [0..] rawPieces
