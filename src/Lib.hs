@@ -28,7 +28,7 @@ someFunc =
             , ("rook", Rook.topper)  
             , ("knight", Knight.topper)
             , ("bishop", Bishop.topper)
-            , ("queen", Queen.topper)
+            , ("queen", Queen.topper 8)
             , ("king", King.topper)
             ]
         pieces = 
