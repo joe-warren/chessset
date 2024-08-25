@@ -5,7 +5,7 @@ module Queen
 ) where
 
 import qualified Waterfall
-import Linear (zero, V2 (..), V3 (..), unit, _x, _z)
+import Linear (zero, V2 (..), V3 (..), unit, _x, _z, _y)
 import qualified Topper
 
 xSection :: Double -> Waterfall.Path2D
@@ -37,10 +37,10 @@ xSectionOuter radius =
 cuts :: Int -> Double -> Waterfall.Solid
 cuts n radius = 
   let angle = 2 * pi / fromIntegral n
-      cutW = 0.8 * radius * sin (angle/2)
+      cutW = 0.8 * radius * tan (angle/2)
       oneCut = 
         Waterfall.translate (V3 0 0 (radius * 1.25)) $
-        Waterfall.rotate (unit _x) (pi/2) $
+        Waterfall.rotate (unit _x) (-pi/2) $
         Waterfall.scale (V3 cutW cutW (radius * 2)) Waterfall.unitCylinder
       allCuts = mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ oneCut
   in allCuts

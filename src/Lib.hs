@@ -25,7 +25,7 @@ someFunc :: IO ()
 someFunc = 
     let rawPieces = 
             [ ("pawn", Pawn.topper 0.1)
-            , ("rook", Rook.topper)  
+            , ("rook", Rook.topper (Rook.polygonalCrenellations 4 3 0.8))  
             , ("knight", Knight.topper)
             , ("bishop", Bishop.topper)
             , ("queen", Queen.topper 4)
@@ -41,7 +41,7 @@ someFunc =
                     , Piece.pieceHeight = interpolate 3 6.5
                     , Piece.pieceTopper = topper (interpolate 0.5 0.8) 
                     , Piece.pieceSkirting = skirting
-                    , Piece.pieceSolidification = polygonize 4 -- Waterfall.revolution -- polygonize (i + 4)
+                    , Piece.pieceSolidification = polygonize 4 --  Waterfall.revolution -- polygonize (i + 4)
                     }
                 )
                 | (i, (name, topper)) <- zip [0..] rawPieces
