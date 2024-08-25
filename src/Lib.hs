@@ -11,10 +11,12 @@ import qualified Queen
 import qualified King
 import qualified Piece
 import Polygonize (polygonize)
+import LinearSpaced (linearSpaced)
 import Linear (V2(..), zero)
 import Data.Foldable (forM_)
 import qualified System.Directory 
 import System.FilePath ((</>), (<.>))
+
 
 skirting :: Waterfall.Path2D
 skirting = Waterfall.pathFrom zero
@@ -27,8 +29,10 @@ makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
 makeSet f directory = do
     System.Directory.createDirectoryIfMissing True directory
     let pieces = [(kind, f kind) | kind <- Piece.allKinds]
+    let res = 0.005
     forM_ pieces $ \(kind, p) ->
-          Waterfall.writeSTL 0.005 ( directory </> show kind <.> ".stl") p
+          Waterfall.writeSTL res ( directory </> show kind <.> ".stl") p
+    Waterfall.writeSTL res (directory </> "All.stl") (linearSpaced 0.1 (snd <$> pieces))
 
 nSidedSet :: Int -> Piece.Kind -> Waterfall.Solid
 nSidedSet n kind = 

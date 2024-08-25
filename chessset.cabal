@@ -30,6 +30,7 @@ library
       King
       Knight
       Lib
+      LinearSpaced
       Pawn
       Piece
       Polygonize
