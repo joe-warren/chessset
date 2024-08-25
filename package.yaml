@@ -25,6 +25,8 @@ dependencies:
 - lens
 - optparse-applicative
 - waterfall-cad
+- filepath
+- directory
 
 ghc-options:
 - -Wall

@@ -7,6 +7,7 @@ module Queen
 import qualified Waterfall
 import Linear (zero, V2 (..), V3 (..), unit, _x, _z, _y)
 import qualified Topper
+import qualified Polygonize
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -37,7 +38,7 @@ xSectionOuter radius =
 cuts :: Int -> Double -> Waterfall.Solid
 cuts n radius = 
   let angle = 2 * pi / fromIntegral n
-      cutW = 0.8 * radius * tan (angle/2)
+      cutW = 0.4 * Polygonize.sideLength n radius 
       oneCut = 
         Waterfall.translate (V3 0 0 (radius * 1.25)) $
         Waterfall.rotate (unit _x) (-pi/2) $

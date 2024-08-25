@@ -7,6 +7,7 @@ module Rook
 
 
 import qualified Waterfall
+import qualified Polygonize
 import Linear (zero, V2 (..), V3 (..), unit, _z, _x, _y, (*^))
 import Topper (Args(..))
 import Data.Function ((&))
@@ -36,7 +37,7 @@ radialCrenellations n r =
 polygonalCrenellations :: Int -> Int -> Double -> Double -> Waterfall.Solid
 polygonalCrenellations nSides cutsPerSide scaleFactor radius =
   let angle = 2 * pi / fromIntegral nSides
-      sideW = scaleFactor * 2 * radius * tan (angle/2)
+      sideW = scaleFactor * Polygonize.sideLength nSides radius 
       cutW = sideW / (2 * fromIntegral cutsPerSide + 1)
       oneCut = 
         mconcat $

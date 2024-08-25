@@ -1,7 +1,12 @@
 {-# LANGUAGE RecordWildCards #-}
 module Piece 
 ( PieceData (..)
+, Kind (..)
 , piece
+, index
+, interpolate
+, pointValue 
+, allKinds
 ) where
 
 import qualified Waterfall
@@ -9,6 +14,25 @@ import Linear (V3 (..), _z)
 import Control.Lens ((^.))
 import qualified Base
 import qualified Topper
+
+data Kind = Pawn | Rook | Knight | Bishop | Queen | King deriving (Eq, Ord, Enum, Bounded, Show)
+
+allKinds :: [Kind]
+allKinds = [minBound..maxBound]
+
+index :: Kind -> Int
+index = fromEnum
+
+interpolate :: Floating f => f -> f -> Kind -> f 
+interpolate low hi kind = low + (hi - low) * (fromIntegral (index kind) / fromIntegral (index maxBound))
+
+pointValue :: Kind -> Maybe Int
+pointValue Pawn = Just 1
+pointValue Knight = Just 3
+pointValue Bishop = Just 3
+pointValue Rook = Just 5
+pointValue Queen = Just 9
+pointValue King = Nothing
 
 data PieceData  = PieceData 
     { pieceBaseR :: Double
