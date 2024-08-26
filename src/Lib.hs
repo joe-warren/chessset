@@ -156,11 +156,11 @@ pointValueSet font kind =
 
 someFunc :: IO ()
 someFunc = do
-    {--makeSet (nSidedSet 4) "four-sided"
+    makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
     makeSet indexSidedSet "variable-sided"
     makeSet roundSet "round"
-    makeSet starSet "star"--}
+    makeSet starSet "star"
     monospace <- Waterfall.fontFromSystem "monospace" Waterfall.Bold 12
     sans <- Waterfall.fontFromSystem "sans" Waterfall.Bold 12
     serif <- Waterfall.fontFromSystem "serif" Waterfall.Bold 12
