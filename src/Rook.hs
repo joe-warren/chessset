@@ -3,6 +3,7 @@ module Rook
 ( topper
 , polygonalCrenellations 
 , radialCrenellations
+, noCrenellations
 ) where
 
 
@@ -51,6 +52,8 @@ polygonalCrenellations nSides cutsPerSide scaleFactor radius =
       allCuts = mconcat . take nSides . iterate (Waterfall.rotate (unit _z) angle) $ oneCut
   in allCuts
 
+noCrenellations :: Double -> Waterfall.Solid
+noCrenellations _radius = Waterfall.nowhere
 
 topper :: (Double -> Waterfall.Solid) -> Double -> Topper.Args -> Waterfall.Solid
 topper crenellations radius Topper.Args {..} = topperSolidification (xSection radius) `Waterfall.difference` crenellations radius
