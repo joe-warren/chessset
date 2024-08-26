@@ -12,3 +12,9 @@ You'll need the OpenCascade libraries installed, there are instructions for this
 
 Running the project will create a bunch of directories containing the generated chess sets. 
 
+## Hacking
+
+The entrypoint, and the top level descriptions of the individual chesssets, is in [`src/Sets.hs`](src/Sets.hs). 
+
+That's probably a good starting point if you're looking to make modifications.
+

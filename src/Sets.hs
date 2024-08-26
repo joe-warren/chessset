@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
-module Lib
-    ( someFunc
+module Sets
+    ( writeAllSets
     ) where
 
 import qualified Waterfall
@@ -150,8 +150,8 @@ pointValueSet font kind =
                 (Waterfall.polygonize 4)
                 kind
 
-someFunc :: IO ()
-someFunc = do
+writeAllSets :: IO ()
+writeAllSets = do
     makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
     makeSet indexSidedSet "variable-sided"

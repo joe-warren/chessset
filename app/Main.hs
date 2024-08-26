@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Lib
+import Sets
 
 main :: IO ()
-main = someFunc
+main = writeAllSets

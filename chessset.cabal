@@ -29,13 +29,13 @@ library
       Bishop
       King
       Knight
-      Lib
       LinearSpaced
       Pawn
       Piece
       Polygonize
       Queen
       Rook
+      Sets
       Skirting
       Splice
       TextTopper
