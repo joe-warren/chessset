@@ -12,6 +12,7 @@ import qualified Queen
 import qualified King
 import qualified Piece
 import qualified Topper
+import TextTopper (textTopper)
 import Polygonize (polygonize)
 import LinearSpaced (linearSpaced)
 import Linear (V2(..), zero, unit, _z)
@@ -120,10 +121,49 @@ starSet kind =
                     <> (Waterfall.rotate (unit _z) (pi/3) . Waterfall.polygonize 3))
                 kind
 
+                
+notationSet :: Waterfall.Font -> Piece.Kind -> Waterfall.Solid
+notationSet font kind = 
+    let topper = textTopper font . Piece.notation $ kind
+    in Piece.piece $
+            defaultSizes
+                (topper (Piece.interpolate 0.5 0.8 kind))
+                skirting
+                Waterfall.revolution
+                kind
+
+-- | You absolutely can't print this (there are loose letters)
+-- It's just included because I'd already built the scaffolding for notation/pointsValue
+nameSet :: Waterfall.Font -> Piece.Kind -> Waterfall.Solid
+nameSet font kind = 
+    let topper = textTopper font . show $ kind
+    in Piece.piece $
+            defaultSizes
+                (topper (Piece.interpolate 0.5 0.8 kind))
+                skirting
+                Waterfall.revolution
+                kind
+
+pointValueSet :: Waterfall.Font -> Piece.Kind -> Waterfall.Solid
+pointValueSet font kind = 
+    let topper = textTopper font . maybe "∞" show . Piece.pointValue $ kind
+    in Piece.piece $
+            defaultSizes
+                (topper (Piece.interpolate 0.5 0.8 kind))
+                skirting
+                (Waterfall.polygonize 4)
+                kind
+
 someFunc :: IO ()
 someFunc = do
-    makeSet (nSidedSet 4) "four-sided"
+    {--makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
     makeSet indexSidedSet "variable-sided"
     makeSet roundSet "round"
-    makeSet starSet "star"
+    makeSet starSet "star"--}
+    monospace <- Waterfall.fontFromSystem "monospace" Waterfall.Bold 12
+    sans <- Waterfall.fontFromSystem "sans" Waterfall.Bold 12
+    serif <- Waterfall.fontFromSystem "serif" Waterfall.Bold 12
+    makeSet (notationSet monospace) "notation"
+    makeSet (pointValueSet sans) "pointsValue"
+    makeSet (nameSet serif) "name"

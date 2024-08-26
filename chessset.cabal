@@ -37,6 +37,7 @@ library
       Queen
       Rook
       Splice
+      TextTopper
       Topper
   other-modules:
       Paths_chessset

@@ -27,7 +27,6 @@ xSection radius =
             , Waterfall.lineTo (V2 0 hi)
             ]
 
-
 radialCrenellations :: Int -> Double -> Waterfall.Solid
 radialCrenellations n r =
     let t = r * 0.3 

@@ -5,7 +5,8 @@ module Piece
 , piece
 , index
 , interpolate
-, pointValue 
+, pointValue
+, notation
 , allKinds
 ) where
 
@@ -33,6 +34,14 @@ pointValue Bishop = Just 3
 pointValue Rook = Just 5
 pointValue Queen = Just 9
 pointValue King = Nothing
+
+notation :: Kind -> String
+notation Pawn = "P"
+notation Knight = "N"
+notation Bishop = "B"
+notation Rook = "R"
+notation Queen = "Q"
+notation King = "K"
 
 data PieceData  = PieceData 
     { pieceBaseR :: Double
