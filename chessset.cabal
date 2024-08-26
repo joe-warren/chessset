@@ -36,6 +36,7 @@ library
       Polygonize
       Queen
       Rook
+      Skirting
       Splice
       TextTopper
       Topper

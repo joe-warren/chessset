@@ -12,22 +12,18 @@ import qualified Queen
 import qualified King
 import qualified Piece
 import qualified Topper
+import qualified Skirting
 import TextTopper (textTopper)
 import Polygonize (polygonize)
 import LinearSpaced (linearSpaced)
-import Linear (V2(..), zero, unit, _z)
 import Data.Foldable (forM_)
 import qualified System.Directory 
 import System.FilePath ((</>), (<.>))
 import qualified Polygonize as Waterfall
 import Piece (PieceData(pieceSolidification))
+import Linear (unit, _z)
+import Data.Maybe (fromMaybe)
 
-skirting :: Waterfall.Path2D
-skirting = Waterfall.pathFrom zero
-    [ Waterfall.lineRelative2D (V2 0.05 0.025)
-    , Waterfall.lineRelative2D (V2 (-0.05) 0.075)
-    , Waterfall.arcViaRelative2D (V2 0.05 0.05) (V2 0 0.1)
-    ]
 
 makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
 makeSet f directory = do
@@ -64,7 +60,7 @@ nSidedSet n kind =
     in  Piece.piece $
             defaultSizes 
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 (polygonize n)
                 kind
 
@@ -82,7 +78,7 @@ indexSidedSet kind =
     in  Piece.piece $
             defaultSizes 
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                (Skirting.crenellatedSkirting . fromMaybe 10 . Piece.pointValue $ kind)
                 (polygonize sides)
                 kind
 
@@ -99,7 +95,7 @@ roundSet kind =
     in  Piece.piece $
             defaultSizes
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 Waterfall.revolution
                 kind
             
@@ -116,7 +112,7 @@ starSet kind =
     in  Piece.piece $
             defaultSizes
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 (Waterfall.polygonize 3 
                     <> (Waterfall.rotate (unit _z) (pi/3) . Waterfall.polygonize 3))
                 kind
@@ -128,7 +124,7 @@ notationSet font kind =
     in Piece.piece $
             defaultSizes
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 Waterfall.revolution
                 kind
 
@@ -140,7 +136,7 @@ nameSet font kind =
     in Piece.piece $
             defaultSizes
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 Waterfall.revolution
                 kind
 
@@ -150,7 +146,7 @@ pointValueSet font kind =
     in Piece.piece $
             defaultSizes
                 (topper (Piece.interpolate 0.5 0.8 kind))
-                skirting
+                Skirting.classicSkirting
                 (Waterfall.polygonize 4)
                 kind
 
