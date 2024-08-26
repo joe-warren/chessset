@@ -31,4 +31,5 @@ polygonize n path =
                 Waterfall.translate (V3 0 0 (-5)) $ 
                     Waterfall.prism 10 (Waterfall.fromPath . scalePath $ (Waterfall.closeLoop path))
         maskedPrism = Waterfall.intersection mask prism
-    in   mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ maskedPrism 
+    in  
+        Waterfall.rotate (unit _z) (pi/2) . mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ maskedPrism 

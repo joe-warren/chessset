@@ -8,6 +8,7 @@ import qualified Waterfall
 import Linear (zero, V2 (..), V3 (..), unit, _x, _z, _y)
 import qualified Topper
 import qualified Polygonize
+import Data.Function ((&))
 
 xSection :: Double -> Waterfall.Path2D
 xSection radius = 
@@ -40,19 +41,20 @@ cuts n radius =
   let angle = 2 * pi / fromIntegral n
       cutW = 0.4 * Polygonize.sideLength n radius 
       oneCut = 
-        Waterfall.translate (V3 0 0 (radius * 1.25)) $
-        Waterfall.rotate (unit _x) (-pi/2) $
-        Waterfall.scale (V3 cutW cutW (radius * 2)) Waterfall.unitCylinder
+        Waterfall.unitCylinder
+          & Waterfall.scale (V3 cutW cutW (radius * 2)) 
+          & Waterfall.rotate (unit _x) (-pi/2)
+          & Waterfall.translate (V3 0 0 (radius * 1.25)) 
+          & Waterfall.rotate (unit _z) (pi/2)
       allCuts = mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ oneCut
   in allCuts
-      
 
 
 simpleTopper :: Double -> Topper.Args -> Waterfall.Solid
 simpleTopper radius Topper.Args {..} = 
-  (topperSolidification $ xSection radius) 
+  topperSolidification (xSection radius) 
 
 topper :: Int -> Double -> Topper.Args -> Waterfall.Solid
 topper cutCount radius Topper.Args {..} = 
-  (topperSolidification $ xSection radius) 
-  <> ((topperSolidification $ xSectionOuter radius) `Waterfall.difference` (cuts cutCount radius))
+  topperSolidification (xSection radius) 
+  <> (topperSolidification (xSectionOuter radius) `Waterfall.difference` cuts cutCount radius)

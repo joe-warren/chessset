@@ -30,7 +30,7 @@ xSection radius =
 radialCrenellations :: Int -> Double -> Waterfall.Solid
 radialCrenellations n r =
     let t = r * 0.3 
-        beam = Waterfall.scale (V3 t (r*4) (t*2)) $ Waterfall.translate (V3 0 0.5 0) Waterfall.centeredCube
+        beam = Waterfall.scale (V3 (r*4) t (t*2)) $ Waterfall.translate (V3 0.5 0 0) Waterfall.centeredCube
         angle = (2 * pi) / fromIntegral n
         in Waterfall.translate (V3 0 0 (r * 2)). mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ beam
         
@@ -46,6 +46,7 @@ polygonalCrenellations nSides cutsPerSide scaleFactor radius =
                     & Waterfall.translate (V3 (-0.5) 0.5 0)
                     & Waterfall.scale (V3 cutW (radius * 2) (cutW * 2)) 
                     & Waterfall.translate (V3 x 0 (radius* 2)) 
+                    & Waterfall.rotate (unit _z) (pi/2)
                 | i <- [1 .. cutsPerSide]
             ]
       allCuts = mconcat . take nSides . iterate (Waterfall.rotate (unit _z) angle) $ oneCut
