@@ -4,6 +4,8 @@ Procedural chess set generator; the sets are designed to be 3D printable (althou
 
 Implemented using [Waterfall-CAD](https://github.com/joe-warren/opencascade-hs/) ([hackage link](https://hackage.haskell.org/package/waterfall-cad)).
 
+Units are in `cm`; this is a poor choice, and you're almost certainly going to need to scale the generated stl files by a factor of 10 when slicing them.
+
 ## Building 
 
 Should support either the `stack` or `cabal` haskell build tools. 

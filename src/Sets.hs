@@ -23,19 +23,24 @@ import qualified Polygonize as Waterfall
 import Piece (PieceData(pieceSolidification))
 import Linear (unit, _z)
 import Data.Maybe (fromMaybe)
-
+import Split (split)
 
 makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
 makeSet f subDir = do
     let directory = "output" </> subDir
+    let splitDir = directory </> "split"
     System.Directory.createDirectoryIfMissing True directory
+    System.Directory.createDirectoryIfMissing True splitDir
     let pieces = [(kind, f kind) | kind <- Piece.allKinds]
     let res = 0.005
     let write filepath p = do
             putStrLn filepath
             Waterfall.writeSTL res filepath p
-    forM_ pieces $ \(kind, p) ->
+    forM_ pieces $ \(kind, p) -> do
           write ( directory </> show kind <.> ".stl") p
+          let (a, b) = split p 
+          write ( splitDir </> show kind <> "-a" <.> ".stl") a
+          write ( splitDir </> show kind <> "-b" <.> ".stl") b
     write (directory </> "All.stl") (linearSpaced 0.1 (snd <$> pieces))
 
 defaultSizes :: (Topper.Args -> Waterfall.Solid) -> Waterfall.Path2D -> (Waterfall.Path2D -> Waterfall.Solid) -> Piece.Kind -> Piece.PieceData
