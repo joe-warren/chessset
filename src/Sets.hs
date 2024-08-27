@@ -26,7 +26,8 @@ import Data.Maybe (fromMaybe)
 
 
 makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
-makeSet f directory = do
+makeSet f subDir = do
+    let directory = "output" </> subDir
     System.Directory.createDirectoryIfMissing True directory
     let pieces = [(kind, f kind) | kind <- Piece.allKinds]
     let res = 0.005
