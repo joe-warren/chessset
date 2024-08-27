@@ -65,7 +65,7 @@ nSidedSet n kind =
                 Piece.King -> King.topper
     in  Piece.piece $
             defaultSizes 
-                (topper (Piece.interpolate 0.5 0.8 kind))
+                (topper (Piece.interpolate 0.5 0.9 kind))
                 Skirting.classicSkirting
                 (polygonize n)
                 kind
@@ -83,7 +83,7 @@ indexSidedSet kind =
                 Piece.King -> King.topper
     in  Piece.piece $
             defaultSizes 
-                (topper (Piece.interpolate 0.5 0.8 kind))
+                (topper (Piece.interpolate 0.5 0.9 kind))
                 (Skirting.crenellatedSkirting . fromMaybe 10 . Piece.pointValue $ kind)
                 (polygonize sides)
                 kind
@@ -100,10 +100,32 @@ roundSet kind =
                 Piece.King -> King.topper
     in  Piece.piece $
             defaultSizes
-                (topper (Piece.interpolate 0.5 0.8 kind))
+                (topper (Piece.interpolate 0.5 0.9 kind))
                 Skirting.classicSkirting
                 Waterfall.revolution
                 kind
+
+                
+tallSet :: Piece.Kind -> Waterfall.Solid
+tallSet kind = 
+    let topper = 
+            case kind of 
+                Piece.Pawn -> Pawn.topper 0.1
+                Piece.Rook -> Rook.topper (Rook.radialCrenellations 7)  
+                Piece.Knight -> Knight.topper
+                Piece.Bishop -> Bishop.topper 
+                Piece.Queen -> Queen.topper 7
+                Piece.King -> King.topper
+    in  Piece.piece $
+            Piece.PieceData 
+                { Piece.pieceBaseR = Piece.interpolate 1.0 1.6 kind
+                , Piece.pieceNeckR = Piece.interpolate 0.25 0.6 kind 
+                , Piece.pieceCollarR = Piece.interpolate 0.8 1.4 kind
+                , Piece.pieceHeight = Piece.interpolate 6 12 kind
+                , Piece.pieceTopper = topper (Piece.interpolate 0.9 1.5 kind)
+                , Piece.pieceSkirting = Skirting.classicSkirting
+                , Piece.pieceSolidification = Waterfall.revolution
+                }
             
 starSet :: Piece.Kind -> Waterfall.Solid
 starSet kind = 
@@ -117,7 +139,7 @@ starSet kind =
                 Piece.King -> King.topper
     in  Piece.piece $
             defaultSizes
-                (topper (Piece.interpolate 0.5 0.8 kind))
+                (topper (Piece.interpolate 0.5 0.9 kind))
                 Skirting.classicSkirting
                 (Waterfall.polygonize 3 
                     <> (Waterfall.rotate (unit _z) (pi/3) . Waterfall.polygonize 3))
@@ -151,17 +173,18 @@ pointValueSet font kind =
     let topper = textTopper font . maybe "∞" show . Piece.pointValue $ kind
     in Piece.piece $
             defaultSizes
-                (topper (Piece.interpolate 0.5 0.8 kind))
+                (topper (Piece.interpolate 0.5 0.9 kind))
                 Skirting.classicSkirting
                 (Waterfall.polygonize 4)
                 kind
 
 writeAllSets :: IO ()
 writeAllSets = do
+    makeSet roundSet "round"
+    makeSet tallSet "tall"
     makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
     makeSet indexSidedSet "variable-sided"
-    makeSet roundSet "round"
     makeSet starSet "star"
     monospace <- Waterfall.fontFromSystem "monospace" Waterfall.Bold 12
     sans <- Waterfall.fontFromSystem "sans" Waterfall.Bold 12
