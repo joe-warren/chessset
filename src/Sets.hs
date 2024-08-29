@@ -21,9 +21,10 @@ import qualified System.Directory
 import System.FilePath ((</>), (<.>))
 import qualified Polygonize as Waterfall
 import Piece (PieceData(pieceSolidification))
-import Linear (unit, _z)
+import Linear (unit, _z, V3 (..))
 import Data.Maybe (fromMaybe)
 import Split (split)
+import Waterfall (writeSTL)
 
 makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
 makeSet f subDir = do
@@ -126,6 +127,32 @@ tallSet kind =
                 , Piece.pieceSkirting = Skirting.classicSkirting
                 , Piece.pieceSolidification = Waterfall.revolution
                 }
+
+shortKingSet :: Piece.Kind -> Waterfall.Solid
+shortKingSet kind = 
+    let topper = 
+            case kind of 
+                Piece.Pawn -> Pawn.topper 0.1
+                Piece.Rook -> Rook.topper (Rook.radialCrenellations 7)  
+                Piece.Knight -> Knight.topper
+                Piece.Bishop -> Bishop.topper 
+                Piece.Queen -> Queen.topper 7
+                Piece.King -> King.topper
+    in  Piece.piece $
+            Piece.PieceData 
+                { Piece.pieceBaseR = case kind of
+                    Piece.King -> 1.2
+                    _ -> Piece.interpolate 1.0 1.6 kind
+                , Piece.pieceNeckR = Piece.interpolate 0.25 0.6 kind 
+                , Piece.pieceCollarR = Piece.interpolate 0.4 0.8 kind
+                , Piece.pieceHeight = 
+                    case kind of 
+                        Piece.King -> 3
+                        _ -> Piece.interpolate 3 6.5 kind
+                , Piece.pieceTopper = topper (Piece.interpolate 0.5 0.9 kind)
+                , Piece.pieceSkirting = Skirting.classicSkirting
+                , Piece.pieceSolidification = Waterfall.revolution
+                }
             
 starSet :: Piece.Kind -> Waterfall.Solid
 starSet kind = 
@@ -182,6 +209,7 @@ writeAllSets :: IO ()
 writeAllSets = do
     makeSet roundSet "round"
     makeSet tallSet "tall"
+    makeSet shortKingSet "short-king"
     makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
     makeSet indexSidedSet "variable-sided"
@@ -192,3 +220,5 @@ writeAllSets = do
     makeSet (notationSet monospace) "notation"
     makeSet (pointValueSet sans) "pointsValue"
     makeSet (nameSet serif) "name"
+
+    Waterfall.writeSTL 0.05 ("output" </> "spacer" <.> ".stl") (Waterfall.scale (V3 0.3 0.3 1) Waterfall.unitCube)
