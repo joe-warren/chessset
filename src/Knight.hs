@@ -95,7 +95,7 @@ topper :: Double -> Topper.Args -> Waterfall.Solid
 topper r _ = 
     let p x t = Waterfall.translate (V3 0 0 x) . Waterfall.prism t . Waterfall.fromPath
         eyeCutA = p (-1) 1.5 xSectionEye 
-        eyeCutB = p 4.75 1.5 xSectionEye 
+        eyeCutB = p 4.5 1.5 xSectionEye 
         withEye = (`Waterfall.difference` (eyeCutA <> eyeCutB))
         position x = 
             let rx = Waterfall.rotate (V3 1 0 0) (-pi/2) x
