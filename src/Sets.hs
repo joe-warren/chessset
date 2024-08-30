@@ -257,9 +257,9 @@ pointValueSet font kind =
 
 writeAllSets :: IO ()
 writeAllSets = do
-    makeSet alternateProfileSet "alternate-profile"
     makeSet roundSet "round"
     makeSet tallSet "tall"
+    makeSet alternateProfileSet "alternate-profile"
     makeSet shortKingSet "short-king"
     makeSet (nSidedSet 4) "four-sided"
     makeSet (nSidedSet 3) "three-sided"
