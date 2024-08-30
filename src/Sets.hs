@@ -67,6 +67,8 @@ defaultSizes pieceTopper pieceSkirting pieceSolidification kind =
         , ..
         }
 
+        
+
 nSidedSet :: Int -> Piece.Kind -> Waterfall.Solid
 nSidedSet n kind = 
     let topper = 
@@ -167,6 +169,40 @@ shortKingSet kind =
                 , Piece.pieceTopper = topper (Piece.interpolate 0.5 0.9 kind)
                 , Piece.pieceSolidification = Waterfall.revolution
                 }
+
+alternateProfile :: Double -> Double -> Waterfall.Path2D
+alternateProfile r = 
+    let segment :: Double -> Double -> Double -> Double -> Waterfall.Path2D
+        segment height rLow rHi curviness = 
+             Waterfall.bezier (V2 rLow 0) (V2 (rLow + curviness) 0) (V2 (rHi + curviness) height) (V2 rHi height)
+    in Profile.makeProfile 
+        [ Profile.FixedSizeSegment (Waterfall.line (V2 0 0) (V2 r 0))
+        , Profile.FixedSizeSegment (segment 0.4 r r (r * 0.15))
+        , Profile.FixedSizeSegment (Waterfall.line (V2 r 0 ) (V2 (r*0.2) 0))
+        , Profile.VariableSizeSegment (segment 0.2 (r*0.1) (r * 0.2) (r * 0.3))
+        , Profile.VariableSizeSegment (segment 0.25 (r*0.2) (r * 0.3) (r * 0.3))
+        , Profile.VariableSizeSegment (segment 0.3 (r*0.3) (r * 0.4) (r * 0.3))
+        , Profile.FixedSizeSegment (Waterfall.line (V2 (r*0.4) 0) (V2 0 0))
+        ]
+
+alternateProfileSet :: Piece.Kind -> Waterfall.Solid
+alternateProfileSet kind = 
+    let topper = 
+            case kind of 
+                Piece.Pawn -> Pawn.topper 0.1
+                Piece.Rook -> Rook.topper (Rook.radialCrenellations 7)  
+                Piece.Knight -> Knight.topper
+                Piece.Bishop -> Bishop.topper 
+                Piece.Queen -> Queen.topper 7
+                Piece.King -> King.topper
+        baseR = Piece.interpolate 1.0 1.6 kind
+    in  Piece.piece $
+            Piece.PieceData 
+                { Piece.pieceHeight = Piece.interpolate 3 6.5 kind
+                , Piece.pieceProfile = alternateProfile baseR
+                , Piece.pieceTopper = topper (baseR*0.6)
+                , Piece.pieceSolidification = Waterfall.revolution
+                }
             
 starSet :: Piece.Kind -> Waterfall.Solid
 starSet kind = 
@@ -221,6 +257,7 @@ pointValueSet font kind =
 
 writeAllSets :: IO ()
 writeAllSets = do
+    makeSet alternateProfileSet "alternate-profile"
     makeSet roundSet "round"
     makeSet tallSet "tall"
     makeSet shortKingSet "short-king"
