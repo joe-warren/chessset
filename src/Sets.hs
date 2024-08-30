@@ -13,6 +13,7 @@ import qualified King
 import qualified Piece
 import qualified Topper
 import qualified Skirting
+import qualified Profile
 import TextTopper (textTopper)
 import Polygonize (polygonize)
 import LinearSpaced (linearSpaced)
@@ -21,10 +22,9 @@ import qualified System.Directory
 import System.FilePath ((</>), (<.>))
 import qualified Polygonize as Waterfall
 import Piece (PieceData(pieceSolidification))
-import Linear (unit, _z, V3 (..))
+import Linear (unit, _z, V3 (..), V2 (..), zero)
 import Data.Maybe (fromMaybe)
 import Split (split)
-import Waterfall (writeSTL)
 
 makeSet :: (Piece.Kind -> Waterfall.Solid) -> FilePath -> IO ()
 makeSet f subDir = do
@@ -44,15 +44,28 @@ makeSet f subDir = do
           write ( splitDir </> show kind <> "-b" <.> ".stl") b
     write (directory </> "All.stl") (linearSpaced 0.1 (snd <$> pieces))
 
+
+simpleProfile :: Double -> Double -> Double -> Waterfall.Path2D -> Double -> Waterfall.Path2D
+simpleProfile rBase rNeck rCollar skirting = 
+    Profile.makeProfile 
+        [ Profile.FixedSizeSegment (Waterfall.line (V2 0 0) (V2 rBase 0))
+        , Profile.FixedSizeSegment skirting
+        , Profile.VariableSizeSegment (Waterfall.bezier (V2 rBase 0) (V2 (rBase * 0.5) 0) (V2 rNeck 0.5) (V2 rNeck 1))
+        , Profile.FixedSizeSegment (Waterfall.line (V2 rNeck 0) (V2 rCollar 0))
+        , Profile.FixedSizeSegment skirting
+        , Profile.VariableSizeSegment (Waterfall.line (V2 rCollar 0) zero)
+        ]
+
 defaultSizes :: (Topper.Args -> Waterfall.Solid) -> Waterfall.Path2D -> (Waterfall.Path2D -> Waterfall.Solid) -> Piece.Kind -> Piece.PieceData
 defaultSizes pieceTopper pieceSkirting pieceSolidification kind = 
-    Piece.PieceData 
-    { Piece.pieceBaseR = Piece.interpolate 1.0 1.6 kind
-    , Piece.pieceNeckR = Piece.interpolate 0.25 0.6 kind 
-    , Piece.pieceCollarR = Piece.interpolate 0.4 0.8 kind
-    , Piece.pieceHeight = Piece.interpolate 3 6.5 kind
-    , ..
-    }
+    let baseR = Piece.interpolate 1.0 1.6 kind
+        neckR = Piece.interpolate 0.25 0.6 kind 
+        collarR = Piece.interpolate 0.4 0.8 kind
+    in Piece.PieceData 
+        { Piece.pieceProfile = simpleProfile baseR neckR collarR pieceSkirting
+        , Piece.pieceHeight = Piece.interpolate 3 6.5 kind
+        , ..
+        }
 
 nSidedSet :: Int -> Piece.Kind -> Waterfall.Solid
 nSidedSet n kind = 
@@ -64,7 +77,7 @@ nSidedSet n kind =
                 Piece.Bishop -> Bishop.topper 
                 Piece.Queen -> Queen.topper n
                 Piece.King -> King.topper
-    in  Piece.piece $
+    in Piece.piece $
             defaultSizes 
                 (topper (Piece.interpolate 0.5 0.9 kind))
                 Skirting.classicSkirting
@@ -117,14 +130,14 @@ tallSet kind =
                 Piece.Bishop -> Bishop.topper 
                 Piece.Queen -> Queen.topper 7
                 Piece.King -> King.topper
+        baseR = Piece.interpolate 1.0 1.6 kind
+        neckR = Piece.interpolate 0.25 0.6 kind 
+        collarR = Piece.interpolate 0.8 1.4 kind
     in  Piece.piece $
             Piece.PieceData 
-                { Piece.pieceBaseR = Piece.interpolate 1.0 1.6 kind
-                , Piece.pieceNeckR = Piece.interpolate 0.25 0.6 kind 
-                , Piece.pieceCollarR = Piece.interpolate 0.8 1.4 kind
+                { Piece.pieceProfile = simpleProfile baseR neckR collarR Skirting.classicSkirting
                 , Piece.pieceHeight = Piece.interpolate 6 12 kind
                 , Piece.pieceTopper = topper (Piece.interpolate 0.9 1.5 kind)
-                , Piece.pieceSkirting = Skirting.classicSkirting
                 , Piece.pieceSolidification = Waterfall.revolution
                 }
 
@@ -138,19 +151,20 @@ shortKingSet kind =
                 Piece.Bishop -> Bishop.topper 
                 Piece.Queen -> Queen.topper 7
                 Piece.King -> King.topper
+        baseR = 
+            case kind of
+                Piece.King -> 1.2
+                _ -> Piece.interpolate 1.0 1.6 kind
+        neckR = Piece.interpolate 0.25 0.6 kind 
+        collarR = Piece.interpolate 0.4 0.8 kind
     in  Piece.piece $
             Piece.PieceData 
-                { Piece.pieceBaseR = case kind of
-                    Piece.King -> 1.2
-                    _ -> Piece.interpolate 1.0 1.6 kind
-                , Piece.pieceNeckR = Piece.interpolate 0.25 0.6 kind 
-                , Piece.pieceCollarR = Piece.interpolate 0.4 0.8 kind
-                , Piece.pieceHeight = 
+                { Piece.pieceHeight = 
                     case kind of 
                         Piece.King -> 3
                         _ -> Piece.interpolate 3 6.5 kind
+                , Piece.pieceProfile = simpleProfile baseR neckR collarR Skirting.classicSkirting
                 , Piece.pieceTopper = topper (Piece.interpolate 0.5 0.9 kind)
-                , Piece.pieceSkirting = Skirting.classicSkirting
                 , Piece.pieceSolidification = Waterfall.revolution
                 }
             
