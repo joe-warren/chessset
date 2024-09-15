@@ -2,6 +2,10 @@
 
 Procedural chess set generator; the sets are designed to be 3D printable.
 
+This project is written up [on my Blog](https://www.doscienceto.it/blog/posts/2024-09-15-chess-set.html).
+
+STL files have been uploaded to [Thingiverse](https://www.thingiverse.com/thing:6767884) and [Printables](https://www.printables.com/model/1008592).
+
 Implemented using [Waterfall-CAD](https://github.com/joe-warren/opencascade-hs/) ([hackage link](https://hackage.haskell.org/package/waterfall-cad)).
 
 Units are in `cm`; this is a poor choice, and you're almost certainly going to need to scale the generated stl files by a factor of 10 when slicing them.
