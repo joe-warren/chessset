@@ -36,3 +36,12 @@ The entrypoint, and the top level descriptions of the individual chesssets, is i
 
 That's probably a good starting point if you're looking to make modifications.
 
+## Images 
+
+![](images/photo-black.jpg)
+![](images/photo-white.jpg)
+![](images/round.png)
+![](images/square.png)
+![](images/variable.png)
+![](images/notation.png)
+![](images/short-king.png)
