@@ -1,6 +1,6 @@
 # Haskell Chess Set
 
-Procedural chess set generator; the sets are designed to be 3D printable (although this is a WIP).
+Procedural chess set generator; the sets are designed to be 3D printable.
 
 Implemented using [Waterfall-CAD](https://github.com/joe-warren/opencascade-hs/) ([hackage link](https://hackage.haskell.org/package/waterfall-cad)).
 
