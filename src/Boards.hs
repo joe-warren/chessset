@@ -12,6 +12,7 @@ import Control.Lens ((^.))
 import Linear
 import Data.Function ((&))
 import System.FilePath ((</>))
+import qualified System.Directory
 import Data.Maybe (catMaybes)
 
 data Colour = White | Black
@@ -26,7 +27,7 @@ renderBoard boardLayout sets path =
         pieces = mconcat . catMaybes $
             [   case boardLayout (x, y) of
                     Nothing -> Nothing
-                    Just (col, kind) -> Just . Waterfall.translate (V3 (fromIntegral x * squareWidth) (fromIntegral y * squareWidth) 0) $ sets col kind 
+                    Just (col, kind) -> Just . Waterfall.translate (V3 (fromIntegral (9-x) * squareWidth) (fromIntegral y * squareWidth) 0) $ sets col kind 
                 | x <- [1..8]
                 , y <- [1..8]
             ]
@@ -56,14 +57,18 @@ renderBoard boardLayout sets path =
             Waterfall.uScale2D 40 $ 
                 Waterfall.rotate2D (pi/2 + pi/6) $
                 Waterfall.solidDiagram (V3 (1) (-1) 1) board
-    in Waterfall.SVG.writeDiagramSVG ("output" </> path) diagram 
+    in do
+        
+        System.Directory.createDirectoryIfMissing True "output"
+        Waterfall.SVG.writeDiagramSVG ("output" </> path) diagram
+        putStrLn path 
 
 homeRow :: Int -> Maybe Piece.Kind
 homeRow 1 = Just Piece.Rook
 homeRow 2 = Just Piece.Knight
 homeRow 3 = Just Piece.Bishop
-homeRow 5 = Just Piece.Queen
-homeRow 4 = Just Piece.King
+homeRow 4 = Just Piece.Queen
+homeRow 5 = Just Piece.King
 homeRow 6 = Just Piece.Bishop
 homeRow 7 = Just Piece.Knight 
 homeRow 8 = Just Piece.Rook
@@ -76,5 +81,30 @@ startingLayout (_, 7) = Just (Black, Piece.Pawn)
 startingLayout (x, 8) = (Black,) <$> homeRow x
 startingLayout _ = Nothing
 
+scotchGambit :: (Int, Int)-> Maybe (Colour, Piece.Kind)
+scotchGambit (6, 1) = Nothing
+scotchGambit (7, 1) = Nothing
+scotchGambit (4, 2) = Nothing
+scotchGambit (5, 2) = Nothing
+scotchGambit (6, 3) = Just (White, Piece.Knight)
+scotchGambit (3, 4) = Just (White, Piece.Bishop)
+scotchGambit (4, 4) = Just (Black, Piece.Pawn)
+scotchGambit (5, 4) = Just (White, Piece.Pawn)
+scotchGambit (3 ,6) = Just (Black, Piece.Knight)
+scotchGambit (5, 7) = Nothing
+scotchGambit (2, 8) = Nothing
+scotchGambit x = startingLayout x
+ 
+rotateKnights :: (Colour -> Piece.Kind -> Waterfall.Solid) -> (Colour -> Piece.Kind -> Waterfall.Solid)
+rotateKnights f c Piece.Knight = 
+    let rotationAngle = 
+            case c of
+                White -> negate pi/2
+                Black -> pi/2
+        in Waterfall.rotate (unit _z) rotationAngle (f c Piece.Knight)
+rotateKnights f c p = f c p
+
 renderAllBoards :: IO ()
-renderAllBoards = renderBoard (startingLayout) (combineSets Sets.roundSet (Sets.nSidedSet 4)) "board.svg"
+renderAllBoards = do
+    renderBoard (startingLayout) (rotateKnights $ combineSets Sets.roundSet (Sets.nSidedSet 4)) "board.svg"
+    renderBoard (scotchGambit) (rotateKnights $ combineSets Sets.roundSet (Sets.nSidedSet 4)) "scotch-gambit.svg"
