@@ -1,6 +1,10 @@
 module Main (main) where
 
 import Sets
+import Boards
 
 main :: IO ()
-main = writeAllSets
+main = do 
+    renderAllBoards
+    putStrLn "done with svgs"
+    writeAllSets

@@ -1,6 +1,16 @@
 {-# LANGUAGE RecordWildCards #-}
 module Sets
     ( writeAllSets
+    , roundSet 
+    , tallSet 
+    , alternateProfileSet 
+    , shortKingSet 
+    , nSidedSet
+    , indexSidedSet 
+    , starSet 
+    , notationSet
+    , pointValueSet
+    , nameSet
     ) where
 
 import qualified Waterfall
