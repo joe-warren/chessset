@@ -91,7 +91,7 @@ xSectionEye = Waterfall.pathFrom (V2 10.111197 8.4484604)
 
 topper :: Double -> Topper.Args -> Waterfall.Solid
 topper r _ = 
-    let p x t = Waterfall.translate (V3 0 0 x) . Waterfall.prism t . Waterfall.fromPath
+    let p x t = Waterfall.translate (V3 0 0 x) . Waterfall.prism t . Waterfall.makeShape
         eyeCutA = p (-1) 1.5 xSectionEye 
         eyeCutB = p 4.5 1.5 xSectionEye 
         withEye = (`Waterfall.difference` (eyeCutA <> eyeCutB))

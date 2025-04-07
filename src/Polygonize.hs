@@ -23,13 +23,13 @@ polygonize n path =
             , Waterfall.arcViaTo spoke (Waterfall.rotate2D (angle/2) spoke)
             , Waterfall.lineTo zero
             ]
-        mask = Waterfall.prism 10 (Waterfall.fromPath maskPath)
+        mask = Waterfall.prism 10 (Waterfall.makeShape maskPath)
         scalePath = Waterfall.scale2D (V2 (scaleFactor angle) 1)
         prism = 
             Waterfall.rotate (unit _z) (pi/2) $
             Waterfall.rotate (V3 1 0 0) (pi/2) $ 
                 Waterfall.translate (V3 0 0 (-5)) $ 
-                    Waterfall.prism 10 (Waterfall.fromPath . scalePath $ (Waterfall.closeLoop path))
+                    Waterfall.prism 10 (Waterfall.makeShape . scalePath $ (Waterfall.closeLoop path))
         maskedPrism = Waterfall.intersection mask prism
     in  
         Waterfall.rotate (unit _z) (pi/2) . mconcat . take n . iterate (Waterfall.rotate (unit _z) angle) $ maskedPrism 

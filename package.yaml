@@ -25,6 +25,7 @@ dependencies:
 - lens
 - optparse-applicative
 - waterfall-cad
+- waterfall-cad-svg
 - filepath
 - directory
 
