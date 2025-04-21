@@ -5,26 +5,26 @@
 
 packages:
 - completed:
-    hackage: waterfall-cad-0.5.0.0@sha256:c62068c5d87ef0d760ea65cb4b968aa110e30ea7dc52ddc57432972e0130e744,2395
+    hackage: waterfall-cad-0.5.0.1@sha256:2e2f141845d163aba8e26d57aa1b308ef7041714aa74e971b4da5b027ab9cd0f,2395
     pantry-tree:
-      sha256: c92d9fc265f10711c1c9f7cde7caed74c12b5143e4e1593a7f41195990a35897
+      sha256: 09b696ecf054bd5844fcccc325b5a3ed6eca8883a3a2fc8234eb9fdfc7601554
       size: 2386
   original:
-    hackage: waterfall-cad-0.5.0.0
+    hackage: waterfall-cad-0.5.0.1
 - completed:
-    hackage: waterfall-cad-svg-0.5.0.0@sha256:e75e01dd463eb376d677e5e816f9433d9aa821f80cc37cddf4e6e4eaa90f18df,1648
+    hackage: waterfall-cad-svg-0.5.0.1@sha256:04292c27ee3a30d8a726b28b6ebb58a9e79d3993f8d9cff763e544866f981372,1648
     pantry-tree:
-      sha256: d49ee39440ed37470a0203996a26fa5241512e5963eb60686b475e7722571852
+      sha256: 9e10a5a52ae5bb8416585d1b0e8ef7207f52ee48ebdc6fcf9e14268238422f50
       size: 459
   original:
-    hackage: waterfall-cad-svg-0.5.0.0
+    hackage: waterfall-cad-svg-0.5.0.1
 - completed:
-    hackage: opencascade-hs-0.5.0.0@sha256:c4077ef1638119d56bb49756cd4c42cddb3f2777b7b5e78c03d1949b4f98bbbe,15489
+    hackage: opencascade-hs-0.5.0.1@sha256:c711dcf4a8d9573043f9701c3610009b1026f848cd62f62f202edb92b8089e0c,15489
     pantry-tree:
-      sha256: 1ade9e71c00641029fb0cbeb919808f13937baf0900c12c0c0873f601d5183d5
+      sha256: 677cceb5f3a3bbe7dbff8e6fe2f71949b0ecfa5c96a8b057dcb079c9da3dea47
       size: 28645
   original:
-    hackage: opencascade-hs-0.5.0.0
+    hackage: opencascade-hs-0.5.0.1
 snapshots:
 - completed:
     sha256: 925e1bf884fd7a1ed2bfca9a041bed96fba51be6148cfa9fc4a590e218c2e483
